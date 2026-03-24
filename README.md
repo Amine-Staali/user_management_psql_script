@@ -2,9 +2,9 @@
 
 A PostgreSQL (`psql`) script for managing database users and their permissions. The script provides a safe, idempotent workflow to:
 
-1. **View existing database users** — lists all users with key attributes such as superuser status, replication rights, and password expiry.
-2. **Create a new user** — only creates the role if it does not already exist, avoiding errors on re-runs.
-3. **Grant read-only access to a schema** — grants `USAGE` on the schema, `SELECT` on all existing tables and sequences, and sets default privileges so that future tables in the schema are automatically readable by the new user.
+1. **Create a new user** — only creates the role if it does not already exist, avoiding errors on re-runs.
+2. **Grant read-only access to a schema** — grants `USAGE` on the schema, `SELECT` on all existing tables and sequences, and sets default privileges so that future tables in the schema are automatically readable by the new user.
+3. **Grant read-write access to a schema**  — grants `ALL` on the schema and all existing tables and sequences, and sets default privileges so that future tables in the schema are automatically readable & editable by the new user.
 
 ---
 
