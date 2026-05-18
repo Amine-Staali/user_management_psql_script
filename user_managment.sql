@@ -1,3 +1,26 @@
+-- =========================
+-- Set Variables
+-- =========================
+\set my_user     'username'
+\set my_schema   'public'
+\set my_password 'strong_password'
+
+-- =========================
+-- View DB Users
+-- =========================
+SELECT usename     AS username,
+       usesysid    AS user_id,
+       usecreatedb AS can_create_db,
+       usesuper    AS is_superuser,
+       userepl     AS can_replicate,
+       valuntil    AS password_expiry
+FROM pg_user
+ORDER BY usename;
+
+
+-- ==============================================================
+-- Create user if not exist and provide specific acess on schema
+-- ==============================================================
 DO $$
 DECLARE
     my_user     TEXT := 'username';
@@ -32,7 +55,7 @@ BEGIN
             'ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT SELECT ON TABLES TO %I',
             my_schema, my_user
         );
-    EXECUTE format(
+        EXECUTE format(
             'ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT SELECT ON SEQUENCES TO %I',
             my_schema, my_user
         );
@@ -42,10 +65,10 @@ BEGIN
         -- =========================
         -- READ WRITE
         -- =========================
-    EXECUTE format('GRANT ALL ON SCHEMA %I TO %I', my_schema, my_user);
+        EXECUTE format('GRANT ALL ON SCHEMA %I TO %I', my_schema, my_user);
         EXECUTE format('GRANT ALL ON ALL TABLES IN SCHEMA %I TO %I', my_schema, my_user);
         EXECUTE format('GRANT ALL ON ALL SEQUENCES IN SCHEMA %I TO %I', my_schema, my_user);
-        EXECUTE format('GRANT ALL ON ALL PROCEDURES IN SCHEMA %I TO %I', my_schema, my_user);        
+        EXECUTE format('GRANT ALL ON ALL PROCEDURES IN SCHEMA %I TO %I', my_schema, my_user);
         -- Default privileges (future objects)
         EXECUTE format(
             'ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT ALL ON TABLES TO %I',
